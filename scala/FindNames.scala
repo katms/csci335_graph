@@ -10,9 +10,8 @@ object FindNames {
             val names = io.Source.fromFile(args(0)).mkString.split("\r\n")
             val first = names(0)
             val second = names(1)
-            println(first+" "+second+" "+levenshtein(first, second))
-
-            val graph = new Graph[Int]
+            
+            val graph = new Graph[String].connect(first, second, levenshtein(first, second))
             println(graph)
             println("Nodes: "+graph.nodes.size)
             println("Edge: "+graph.edgeCount)
