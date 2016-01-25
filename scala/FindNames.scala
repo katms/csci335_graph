@@ -8,10 +8,28 @@ object FindNames {
         }
         else {
             val names = io.Source.fromFile(args(0)).mkString.split("\r\n")
-            val first = names(0)
-            val second = names(1)
             
-            val graph = new Graph[String].connect(first, second, levenshtein(first, second))
+            // get all possible combinations
+            val pairs = for{
+                i <- 0 until names.length-1
+                j <- i+1 until names.length
+            } yield (names(i), names(j))
+            
+            // draw an edge between every pair of names with a levenshtein distance <= 4 as weight
+            def collectToGraph(pairs: Seq[(String, String)]): Graph[String] = {
+                def iter(pairsLeft: Seq[(String, String)], acc: Graph[String]): Graph[String] = {
+                    if(pairsLeft.isEmpty) acc
+                    else {
+                        val (n1, n2) = pairsLeft.head
+                        val dist = levenshtein(n1, n2)
+                        if(dist <= 4) iter(pairsLeft.tail, acc.connect(n1, n2, dist))
+                        else iter(pairsLeft.tail, acc)
+                    }
+                }
+                iter(pairs, new Graph[String])
+            }
+            
+            val graph = collectToGraph(pairs)
             println(graph)
             println("Nodes: "+graph.nodes.size)
             println("Edge: "+graph.edgeCount)
