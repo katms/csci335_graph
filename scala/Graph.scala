@@ -21,5 +21,11 @@ class Graph[T](adjacencies: Map[T, Set[Edge[T]]]) {
 }
 
 class Edge[T](val n1: T, val n2: T, val weight: Int) {
+    override def toString = s"($n1, $n2): $weight"
     
+    // return true if n1==n1 and n2==n2
+    override def equals(that: Any): Boolean = that match {
+        case other: Edge[T] => this.n1==other.n1 && this.n2==other.n2
+        case _ => false
+    }
 }
