@@ -5,7 +5,7 @@ class Graph[T](adjacencies: Map[T, Set[Edge[T]]]) {
     val nodes = adjacencies.keySet
     val edgeCount = (adjacencies.valuesIterator.map(_.size)).sum
     
-    override def toString = adjacencies.toString
+    override def toString = adjacencies mkString "\n\n"
     
     def connect(node1: T, node2: T, weight: Int): Graph[T] = {
         // edges
