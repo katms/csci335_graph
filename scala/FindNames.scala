@@ -13,6 +13,7 @@ object FindNames {
             val graph = new Graph[Int]
             println(graph)
             println("Nodes: "+graph.nodes.size)
+            println("Edge: "+graph.edgeCount)
         }
     }
 }
