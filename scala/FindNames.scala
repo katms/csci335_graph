@@ -12,8 +12,12 @@ object FindNames {
             // get all possible combinations
             val pairs = for{
                 i <- 0 until names.length-1
+                name1 = names(i)
                 j <- i+1 until names.length
-            } yield (names(i), names(j))
+                name2 = names(j)
+                // skip redundant names
+                if(name1!=name2)
+            } yield (name1, name2)
             
             // draw an edge between every pair of names with a levenshtein distance <= 4 as weight
             def collectToGraph(pairs: Seq[(String, String)]): Graph[String] = {
