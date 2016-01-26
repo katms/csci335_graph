@@ -18,6 +18,34 @@ class Graph[T](adjacencies: Map[T, Set[Edge[T]]]) {
         
         new Graph(adjacencies.updated(node1, adj1+edge1).updated(node2, adj2+edge2))
     }
+    
+    // Prim's algorithm
+    def MST(center: T): Graph[T] = {
+        def iter(candidates: Set[Edge[T]], acc: Graph[T]): Graph[T] = {
+            /*  if we have all the nodes
+                or we're out of edges 
+                because the original was not fully connected
+                or because center wasn't found
+                */
+            if(acc.nodes==this.nodes || candidates.isEmpty) acc
+            else {
+                val min = candidates.min(Ordering.by[Edge[T], Int](_.weight))
+                val newNode = min.n2
+                val connected = acc.connect(min.n1, min.n2, min.weight)
+                
+                /*
+                There are two types of redundant edges to be eliminated: 
+                Edges with a greater weight that link to newNode
+                Edges starting at newNode that lead to nodes already in the graph
+                  Test for the latter using connected to catch a one-time case
+                  where the second node's edge back to center isn't caught
+                */
+                val edges = (candidates.filterNot(_.n2==newNode)) ++ (adjacencies(newNode).filterNot(connected.nodes contains _.n2))
+                iter(edges, connected)
+            }
+        }
+        iter(adjacencies(center), new Graph[T])
+    }
 }
 
 class Edge[T](val n1: T, val n2: T, val weight: Int) {

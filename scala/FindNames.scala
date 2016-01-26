@@ -33,7 +33,7 @@ object FindNames {
                 iter(pairs, new Graph[String])
             }
             
-            val graph = collectToGraph(pairs)
+            val graph = collectToGraph(pairs).MST("Mary")
             println(graph)
             println("Nodes: "+graph.nodes.size)
             println("Edge: "+graph.edgeCount)
