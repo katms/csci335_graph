@@ -5,6 +5,8 @@ class Graph[T](adjacencies: Map[T, Set[Edge[T]]]) {
     val nodes = adjacencies.keySet
     val edgeCount = (adjacencies.valuesIterator.map(_.size)).sum / 2
     
+    val isMST = nodes.size == edgeCount+1
+    
     override def toString = adjacencies mkString "\n\n"
     
     def connect(node1: T, node2: T, weight: Int): Graph[T] = {
@@ -44,7 +46,8 @@ class Graph[T](adjacencies: Map[T, Set[Edge[T]]]) {
                 iter(edges, connected)
             }
         }
-        iter(adjacencies(center), new Graph[T])
+        if(isMST) this
+        else iter(adjacencies(center), new Graph[T])
     }
 }
 
