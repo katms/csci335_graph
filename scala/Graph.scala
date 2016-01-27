@@ -49,6 +49,39 @@ class Graph[T](adjacencies: Map[T, Set[Edge[T]]]) {
         if(isMST) this
         else iter(adjacencies(center), new Graph[T])
     }
+    
+    // traverse an MST centered on the given starting node,
+    // in depth-first order up to the given depth,
+    // and print all nodes found 
+    def depthFirstSearch(start: T, maxDepth: Int): Unit = {
+        def printNode(offset: Int, node: T, dist: Int): Unit = {
+            println("\t"*offset+s"$node ($dist)")
+        }
+        
+        // skip ancestors
+        // we really only need to worry about the parent and grandparent
+        // but this is the easiest way to do it
+        def iter(currentNode: T, depth: Int, ancestors:Set[T]): Unit = {
+            if(depth <= maxDepth) {
+                for{
+                    edge <- adjacencies(currentNode)
+                    node = edge.n2
+                    dist = edge.weight
+                    if(!ancestors(node))
+                } {
+                    printNode(depth, node, dist)
+                    iter(node, depth+1, ancestors+node)
+                }
+            }
+        }
+        
+        if(isMST) {
+            println(adjacencies(start))
+            printNode(0, start, 0)
+            iter(start, 1, Set(start))
+        }
+        else MST(start).depthFirstSearch(start, maxDepth)
+    }
 }
 
 class Edge[T](val n1: T, val n2: T, val weight: Int) {
