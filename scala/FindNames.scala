@@ -1,3 +1,5 @@
+import io.StdIn.readLine
+
 object FindNames {
     def main(args: Array[String]): Unit = {
         if(args.length != 1) {
@@ -7,6 +9,7 @@ object FindNames {
             println("Error: could not open file")
         }
         else {
+            println("Building graph...")
             val names = io.Source.fromFile(args(0)).mkString.split("\r\n")
             
             // get all possible combinations
@@ -33,10 +36,29 @@ object FindNames {
                 iter(pairs, new Graph[String])
             }
             
-            val graph = collectToGraph(pairs).MST("Mary")
+            val graph = collectToGraph(pairs)
+            println("Building graph...")
             println(graph)
             println("Nodes: "+graph.nodes.size)
             println("Edge: "+graph.edgeCount)
+            
+            def runSearch(): Unit = {
+                val search = "(\\w+) (\\d+)".r
+                println("Enter a name and depth limit (Type \"exit\" or Ctrl+C to stop):")
+                readLine() match {
+                    case("exit") => {} //do nothing
+                    case search(name, depth) => {
+                        // run search and repeat
+                        graph.depthFirstSearch(name, depth.toInt)
+                        runSearch()
+                    }
+                    // unexpected input
+                    case _ => runSearch()
+                }
+            }
+            
+            runSearch()
+
         }
     }
     
