@@ -39,7 +39,7 @@ object FindNames {
             val graph = collectToGraph(pairs)
             println("Building graph...")
             println("Nodes: "+graph.nodes.size)
-            println("Edge: "+graph.edgeCount)
+            println("Edges: "+graph.edgeCount)
             
             def runSearch(): Unit = {
                 val search = "(\\w+) (\\d+)".r
