@@ -5,7 +5,7 @@ class Graph[T](adjacencies: Map[T, Set[Edge[T]]]) {
     val nodes = adjacencies.keySet
     val edgeCount = (adjacencies.valuesIterator.map(_.size)).sum / 2
     
-    val isMST = nodes.size == edgeCount+1
+    val isMST = nodes.isEmpty || (nodes.size == edgeCount+1)
     
     override def toString = adjacencies mkString "\n\n"
     
