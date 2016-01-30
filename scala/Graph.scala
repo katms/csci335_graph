@@ -76,7 +76,6 @@ class Graph[T](adjacencies: Map[T, Set[Edge[T]]]) {
         }
         
         if(isMST) {
-            println(adjacencies(start))
             printNode(0, start, 0)
             iter(start, 1, Set(start))
         }

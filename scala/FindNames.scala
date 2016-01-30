@@ -38,7 +38,6 @@ object FindNames {
             
             val graph = collectToGraph(pairs)
             println("Building graph...")
-            println(graph)
             println("Nodes: "+graph.nodes.size)
             println("Edge: "+graph.edgeCount)
             
