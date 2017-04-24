@@ -53,15 +53,6 @@ class Undirected_Graph
             bool operator!=(const Edge& other) const;
         };
         
-        struct Prim //for Prim's algorithm in minimum_spanning_tree()
-        {
-            unsigned dv=INFINITY;
-            T pv;
-            bool known=false;
-            
-            static const unsigned INFINITY=-1;
-        };
-        
         
         /**
         recursive depth_first_search, prints the current node
@@ -73,11 +64,6 @@ class Undirected_Graph
         */
         void _dfs(const T& current_node, const unsigned distance_from_parent,
                const unsigned current_depth, const unsigned depth_limit, std::unordered_set<T>& found) const;
-        
-        
-        //returns true if no Prim in list is still unknown
-        static bool all_known(const std::unordered_map<T, Prim>& list);
-        
         
         
         //table out all outgoing edges from node T

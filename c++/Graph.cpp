@@ -6,6 +6,7 @@
 #include <iostream> //std::cout, std::cerr
 #include <queue> //std::priority_queue
 #include <functional> //std::greater
+#include <algorithm> //any_of
 
 
 //any uses of graph.at(v) instead of graph[v] are because doing this fixed compiler errors for some reason
@@ -86,6 +87,13 @@ void Undirected_Graph<T>::connect(const T& one, const T& two, unsigned weight) /
 template <class T>
 Undirected_Graph<T> Undirected_Graph<T>::minimum_spanning_tree(const T& first) const
 {
+    struct Prim //for Prim's algorithm in minimum_spanning_tree()
+    {
+        unsigned dv=0xffffffff;
+        T pv;
+        bool known=false;
+    };
+
     altered_since_last_calculations=false;
     
     if(graph.empty() || !contains(first))
@@ -118,9 +126,10 @@ Undirected_Graph<T> Undirected_Graph<T>::minimum_spanning_tree(const T& first) c
         vertices[e.node2].pv=first;
         edges.push(e);
     }
-    
+
     //check every vertex
-    while(!all_known(vertices))
+    while(any_of(vertices.begin(), vertices.end(),
+                [](const std::pair<T, Prim>& pair){return !(pair.second.known);}))
     {
         if(edges.empty())
         {
@@ -230,20 +239,6 @@ void Undirected_Graph<T>::_dfs(const T& current_node, const unsigned distance_fr
     } //else if limit not reached
     
     //else current_depth==depth_limit, stop
-}
-
-//checks if every element in list is known
-template<class T>
-bool Undirected_Graph<T>::all_known(const std::unordered_map<T, Prim>& list)
-{
-    for(const auto& el : list)
-    {
-        if(!el.second.known)
-        {
-            return false;
-        }
-    }
-    return true;
 }
 
 
